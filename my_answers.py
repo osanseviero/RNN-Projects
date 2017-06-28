@@ -1,4 +1,5 @@
 import numpy as np
+import string
 
 from keras.models import Sequential
 from keras.layers import Dense
@@ -39,7 +40,6 @@ def build_part1_RNN(step_size, window_size):
     # given - fix random seed - so we can all reproduce the same results on our default time series
     np.random.seed(0)
 
-
     # TODO: build an RNN to perform regression on our time series input/output data
     model = Sequential()
     model.add(LSTM(5, input_shape=(window_size, 1)))
@@ -60,13 +60,12 @@ import string
 
 ### TODO: list all unique characters in the text and remove any non-english ones
 def clean_text(text):
-    # find all unique characters in the text
     allowed_chars = string.ascii_lowercase + ' ' + '!' + ',' + '.' + ':' + ';' + '?'
 
     # remove as many non-english characters and character sequences as you can 
     for char in text:
         if char not in allowed_chars:
-            text = text.replace(char, '')
+            text = text.replace(char, ' ')
 
     # shorten any extra dead space created above
     text = text.replace('  ',' ')
@@ -77,12 +76,12 @@ def window_transform_text(text,window_size,step_size):
     # containers for input/output pairs
     inputs = []
     outputs = []
-    
-    # From 0 to p-t
     ctr = 0
+    
+    # Goes from window_size until the end, and pick previous characters
     for i in range(window_size, len(text), step_size):
         inputs.append(text[ctr:i])
         outputs.append(text[i])
         ctr = ctr + step_size
-
+    
     return inputs,outputs
