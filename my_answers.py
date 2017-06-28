@@ -78,6 +78,11 @@ def window_transform_text(text,window_size,step_size):
     inputs = []
     outputs = []
     
+    # From 0 to p-t
+    ctr = 0
+    for i in range(window_size, len(text), step_size):
+        inputs.append(text[ctr:i])
+        outputs.append(text[i])
+        ctr = ctr + step_size
 
-    
     return inputs,outputs
